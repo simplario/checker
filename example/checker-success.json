@@ -1,0 +1,6 @@
+{
+  "tasks": [
+    { "checker": "filesystem", "path": "example/checker-success.json", "exists": true, "readable": true }
+  ]
+}
+
