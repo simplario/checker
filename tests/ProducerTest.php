@@ -83,16 +83,16 @@ class ProducerTest extends TestCase
     public function testCreateCustomChecker()
     {
         $this->assertEquals(1,1);
-// TODO:
-//        $tasks = [];
-//        $producer = new Producer($tasks);
-//
-//        $stack = new Stack();
-//        $producer->setOutput($stack);
-//
-//        $checker = $producer->createChecker(\Simplario\Checker\Checker\Service::class);
-//
-//        $this->assertInstanceOf(AbstractChecker::class, $checker);
+
+        $tasks = [];
+        $producer = new Producer($tasks);
+
+        $stack = new Stack();
+        $producer->setOutputHandler($stack);
+
+        $checker = $producer->createChecker(\Simplario\Checker\Checker\Filesystem::class);
+
+        $this->assertInstanceOf(AbstractChecker::class, $checker);
     }
 
 
