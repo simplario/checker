@@ -1,0 +1,6 @@
+/.idea
+/.vagrant
+/build
+/composer.lock
+/docs
+/vendor

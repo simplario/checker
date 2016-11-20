@@ -1,0 +1,83 @@
+#!/usr/bin/env php
+<?php
+
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require_once(__DIR__ . '/vendor/autoload.php');
+} elseif (file_exists(__DIR__ . '/../../autoload.php')) {
+    require_once __DIR__ . '/../../autoload.php';
+} else {
+    echo PHP_EOL . 'Error: composer autoload is undefined.' . PHP_EOL;
+    exit();
+}
+
+
+// Configuration file
+
+if (isset($argv[1])) {
+    $path = $argv[1];
+    $taskPathSet = [
+        $path,
+        $path . '.php',
+        $path . '.yml',
+        $path . '.yaml',
+        $path . '.json',
+    ];
+} else {
+    $taskPathSet = [
+        "../../../../checker.php",
+        "../../../../checker.yml",
+        "../../../../checker.yaml",
+        "../../../../checker.json",
+        "../../../checker.php",
+        "../../../checker.yml",
+        "../../../checker.yaml",
+        "../../../checker.json",
+        "../../checker.php",
+        "../../checker.yml",
+        "../../checker.yaml",
+        "../../checker.json",
+        "../checker.php",
+        "../checker.yml",
+        "../checker.yaml",
+        "../checker.json",
+        "checker.php",
+        "checker.yml",
+        "checker.yaml",
+        "checker.json",
+    ];
+}
+
+// Detect configuration file
+
+$path = null;
+foreach ($taskPathSet as $path) {
+    if (file_exists($path)) {
+        break;
+    }
+}
+if ($path === null) {
+    echo PHP_EOL . 'Error: Can not find configuration file for checker.' . PHP_EOL;
+    exit();
+}
+
+// Load configuration
+
+$ext = pathinfo($path, PATHINFO_EXTENSION);
+$config = [];
+if (in_array($ext, ['php'])) {
+    $config = require_once $path;
+} elseif (in_array($ext, ['yaml', 'yml'])) {
+    $config = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($path));
+} elseif (in_array($ext, ['json'])) {
+    $config = json_decode(file_get_contents($path), true);
+}
+
+if (empty($config) || empty($config['tasks']) || !is_array($config['tasks'])) {
+    echo PHP_EOL . 'Error: Configuration file without tasks.' . PHP_EOL;
+    exit();
+}
+
+// Run checker
+
+$hc = new \Simplario\Checker\Producer($config['tasks']);
+$hc->run();

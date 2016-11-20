@@ -1,0 +1,4 @@
+---
+tasks:
+  - { checker: "filesystem", path: "example/checker-success.yaml", exists: true, readable: true }
+
