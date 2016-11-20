@@ -6,14 +6,26 @@ use Simplario\Checker\Output\AbstractOutput;
 use Simplario\Checker\Output\Console;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ConsoleTest
+ *
+ * @package Simplario\Checker\Tests\Output
+ */
 class ConsoleTest extends TestCase
 {
+
+    /**
+     * @return void
+     */
     public function testInstance()
     {
         $output = new Console();
         $this->assertInstanceOf(AbstractOutput::class, $output);
     }
 
+    /**
+     * @return void
+     */
     public function testWrite()
     {
         $output = new Console();
@@ -24,5 +36,4 @@ class ConsoleTest extends TestCase
 
         $this->assertContains('msg123', $string);
     }
-
 }

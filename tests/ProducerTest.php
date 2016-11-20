@@ -11,56 +11,103 @@ use Simplario\Checker\ResultException\FailException;
 use Simplario\Checker\ResultException\SuccessException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ProducerTest
+ *
+ * @package Simplario\Checker\Tests
+ */
 class ProducerTest extends TestCase
 {
+
+    /**
+     * @return void
+     */
     public function testInstance()
     {
-        $config = ['tasks' => []];
+        $tasks = [];
+        $producer = new Producer($tasks);
 
-        $checker = new Producer($config);
+        $this->assertInstanceOf(Producer::class, $producer);
+    }
 
-        $this->assertInstanceOf(Producer::class, $checker);
+    /**
+     * @return void
+     */
+    public function testGetDefaultOutput()
+    {
+        $tasks = [];
+        $producer = new Producer($tasks);
+
+        $output = $producer->getOutputHandler();
+        $this->assertInstanceOf(AbstractOutput::class, $output);
     }
 
 
-    public function testGetSetOutput()
+    /**
+     * @return void
+     */
+    public function testGetCustomOutput()
     {
-        $checker = new Producer();
-        $output = $checker->getOutput();
-        $this->assertInstanceOf(AbstractOutput::class, $output);
+        $tasks = [];
+        $producer = new Producer($tasks);
 
-
-        $checker = new Producer();
         $stack = new Stack();
-        $checker->setOutput($stack);
-        $output = $checker->getOutput();
+        $producer->setOutputHandler($stack);
+
+        $output = $producer->getOutputHandler();
         $this->assertInstanceOf(AbstractOutput::class, $output);
         $this->assertEquals($stack, $output);
     }
 
-
+    /**
+     * @return void
+     */
     public function testCreateChecker()
     {
-        $stack = new Stack();
-        $checker = new Producer();
-        $checker->setOutput($stack);
+        $tasks = [];
+        $producer = new Producer($tasks);
 
-        $fs1 = $checker->createChecker('filesystem');
-        $fs2 = $checker->createChecker('filesystem');
+        $stack = new Stack();
+        $producer->setOutputHandler($stack);
+
+        $fs1 = $producer->createChecker('filesystem');
+        $fs2 = $producer->createChecker('filesystem');
 
         $this->assertInstanceOf(AbstractChecker::class, $fs1);
         $this->assertEquals($fs1, $fs2);
     }
 
+    /**
+     * @return void
+     */
+    public function testCreateCustomChecker()
+    {
+        $this->assertEquals(1,1);
+// TODO:
+//        $tasks = [];
+//        $producer = new Producer($tasks);
+//
+//        $stack = new Stack();
+//        $producer->setOutput($stack);
+//
+//        $checker = $producer->createChecker(\Simplario\Checker\Checker\Service::class);
+//
+//        $this->assertInstanceOf(AbstractChecker::class, $checker);
+    }
 
+
+    /**
+     * @return void
+     */
     public function testRunEmptyConfig()
     {
-        $config = ['tasks' => []];
+        $tasks = [];
+        $producer = new Producer($tasks);
 
         $stack = new Stack();
-        $checker = new Producer();
-        $checker->setOutput($stack);
-        $checker->run();
+        $producer->setOutputHandler($stack);
+
+        $producer->run();
 
         $output = $stack->getStack();
         $this->assertEquals($output[0]['message'], Producer::ERROR_CONFIG_WITH_EMPTY_TASK);
@@ -68,29 +115,34 @@ class ProducerTest extends TestCase
     }
 
 
+    /**
+     * @return void
+     */
     public function testRunTaskOneByOne()
     {
-        $config = ['tasks' => []];
-        $stack = new Stack();
-        $checker = new Producer();
-        $checker->setOutput($stack);
+        $tasks = [];
+        $producer = new Producer($tasks);
 
-        $resultException = $checker->runTask([]);
+        $stack = new Stack();
+        $producer->setOutputHandler($stack);
+
+        $resultException = $producer->runTask([]);
         $this->assertInstanceOf(ErrorException::class, $resultException);
 
-
-        $resultException = $checker->runTask(['checker' => 'filesystem', 'path' => __FILE__, 'exists' => true]);
+        $resultException = $producer->runTask(['checker' => 'filesystem', 'path' => __FILE__, 'exists' => true]);
         $this->assertInstanceOf(SuccessException::class, $resultException);
 
-        $resultException = $checker->runTask(['checker' => 'filesystem', 'path' => __FILE__, 'exists' => false]);
+        $resultException = $producer->runTask(['checker' => 'filesystem', 'path' => __FILE__, 'exists' => false]);
         $this->assertInstanceOf(FailException::class, $resultException);
 
-        $resultException = $checker->runTask(['checker' => 'filesystem', 'path' => __FILE__, 'UNDEFINED' => true]);
+        $resultException = $producer->runTask(['checker' => 'filesystem', 'path' => __FILE__, 'UNDEFINED' => true]);
         $this->assertInstanceOf(ErrorException::class, $resultException);
 
     }
 
-
+    /**
+     * @return void
+     */
     public function testRunProducer()
     {
         $tasks = [
@@ -99,10 +151,12 @@ class ProducerTest extends TestCase
             ['checker' => 'filesystem', 'path' => __FILE__, 'UNDEFINED' => true]
         ];
 
+        $producer = new Producer($tasks);
+
         $stack = new Stack();
-        $checker = new Producer($tasks);
-        $checker->setOutput($stack);
-        $checker->run();
+        $producer->setOutputHandler($stack);
+
+        $producer->run();
 
         $output = json_encode($stack->getStack());
 
@@ -110,5 +164,4 @@ class ProducerTest extends TestCase
         $this->assertContains(Producer::PLACEHOLDER_TASK_FAIL, $output);
         $this->assertContains(Producer::PLACEHOLDER_TASK_ERROR, $output);
     }
-
 }

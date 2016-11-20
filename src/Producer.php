@@ -2,6 +2,7 @@
 
 namespace Simplario\Checker;
 
+use Simplario\Checker\Checker\AbstractChecker;
 use Simplario\Checker\Output\AbstractOutput;
 use Simplario\Checker\Output\Console;
 use Simplario\Checker\ResultException\AbstractResultException;
@@ -9,6 +10,11 @@ use Simplario\Checker\ResultException\ErrorException;
 use Simplario\Checker\ResultException\FailException;
 use Simplario\Checker\ResultException\SuccessException;
 
+/**
+ * Class Producer
+ *
+ * @package Simplario\Checker
+ */
 class Producer
 {
 
@@ -17,48 +23,101 @@ class Producer
     const PLACEHOLDER_TASK_FAIL = ' -  Fail :';
     const PLACEHOLDER_TASK_ERROR = ' - Error :';
 
-    protected $config = [];
+    /**
+     * @var array
+     */
+    protected $taskSet = [];
 
-    public function __construct(array $config = [])
+    /**
+     * @var AbstractChecker[]
+     */
+    protected $checkerSet = [];
+
+    /**
+     * @var AbstractOutput
+     */
+    protected $outputHandler;
+
+    /**
+     * @var array
+     */
+    protected $taskFail = [];
+
+    /**
+     * @var array
+     */
+    protected $taskError = [];
+
+    /**
+     * @var array
+     */
+    protected $taskSuccess = [];
+
+    /**
+     * Producer constructor.
+     *
+     * @param array $taskSet
+     */
+    public function __construct(array $taskSet = [])
     {
-        $this->setConfig($config);
+        $this->setTaskSet($taskSet);
     }
 
-    public function setConfig(array $config)
+    /**
+     * @param array $taskSet
+     *
+     * @return $this
+     */
+    public function setTaskSet(array $taskSet)
     {
-        $this->config = $config;
+        $this->taskSet = $taskSet;
 
         return $this;
     }
 
-    protected $output;
-
-    public function setOutput(AbstractOutput $output)
+    /**
+     * @param AbstractOutput $outputHandler
+     *
+     * @return $this
+     */
+    public function setOutputHandler(AbstractOutput $outputHandler)
     {
-        $this->output = $output;
+        $this->outputHandler = $outputHandler;
+
         return $this;
     }
 
-    public function getOutput()
+    /**
+     * @return AbstractOutput|Console
+     */
+    public function getOutputHandler()
     {
-
-        if ($this->output === null) {
-            $this->output = new Console();
+        if ($this->outputHandler === null) {
+            $this->outputHandler = new Console();
         }
 
-        return $this->output;
+        return $this->outputHandler;
     }
 
+    /**
+     * @param string $msg
+     * @param string $type
+     *
+     * @return $this
+     */
     public function output($msg = '', $type = AbstractOutput::TYPE_DEFAULT)
     {
-        $this->getOutput()->write($msg, $type);
+        $this->getOutputHandler()->write($msg, $type);
 
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function run()
     {
-        if (empty($this->config)) {
+        if (empty($this->taskSet)) {
             $this->output(self::ERROR_CONFIG_WITH_EMPTY_TASK, AbstractOutput::TYPE_ERROR);
 
             return $this;
@@ -66,20 +125,23 @@ class Producer
 
         $this->renderHeader('Run checker');
 
-        foreach ($this->config as $index => $task) {
+        foreach ($this->taskSet as $index => $task) {
             $resultException = $this->runTask($task);
             $this->renderTask($resultException);
         }
 
-        $this->renderList($this->fail, 'Fail list');
-        $this->renderList($this->error, 'Error list');
+        $this->renderList($this->taskFail, 'Fail list');
+        $this->renderList($this->taskError, 'Error list');
         $this->renderStats();
 
         return $this;
     }
 
-    protected $checkerSet = [];
-
+    /**
+     * @param $checkerAlias
+     *
+     * @return AbstractChecker
+     */
     public function createChecker($checkerAlias)
     {
         if (class_exists($checkerAlias)) {
@@ -95,10 +157,11 @@ class Producer
         return $this->checkerSet[$class];
     }
 
-    protected $fail = [];
-    protected $error = [];
-    protected $success = [];
-
+    /**
+     * @param AbstractResultException $resultException
+     *
+     * @return $this
+     */
     protected function renderTask(AbstractResultException $resultException)
     {
         $result = 'undefined:';
@@ -115,6 +178,11 @@ class Producer
         return $this;
     }
 
+    /**
+     * @param $text
+     *
+     * @return $this
+     */
     protected function renderHeader($text)
     {
         $this->output("");
@@ -126,11 +194,14 @@ class Producer
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function renderStats()
     {
-        $fail = count($this->fail);
-        $error = count($this->error);
-        $success = count($this->success);
+        $fail = count($this->taskFail);
+        $error = count($this->taskError);
+        $success = count($this->taskSuccess);
         $total = $error + $success + $fail;
 
         $imgPath = __DIR__ . '/../on-success.txt';
@@ -148,9 +219,14 @@ class Producer
         return $this;
     }
 
+    /**
+     * @param array  $list
+     * @param string $title
+     *
+     * @return $this
+     */
     protected function renderList(array $list, $title = '')
     {
-
         if (count($list) === 0) {
             return $this;
         }
@@ -176,20 +252,25 @@ class Producer
         return $this;
     }
 
+    /**
+     * @param array $task
+     *
+     * @return \Exception|ErrorException|FailException|SuccessException
+     */
     public function runTask(array  $task = [])
     {
         try {
             $checker = $this->createChecker($task['checker']);
             $checker->check($task);
         } catch (SuccessException $resultException) {
-            $this->success[] = $resultException;
+            $this->taskSuccess[] = $resultException;
         } catch (FailException $resultException) {
-            $this->fail[] = $resultException;
+            $this->taskFail[] = $resultException;
         } catch (ErrorException $resultException) {
-            $this->error[] = $resultException;
+            $this->taskError[] = $resultException;
         } catch (\Exception $ex) {
             $resultException = new ErrorException($ex->getMessage(), $task);;
-            $this->error[] = $resultException;
+            $this->taskError[] = $resultException;
         }
 
         if (empty($resultException)) {

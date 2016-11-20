@@ -80,5 +80,5 @@ if (empty($config) || empty($config['tasks']) || !is_array($config['tasks'])) {
 
 // Run checker
 
-$hc = new \Simplario\Checker\Producer($config['tasks']);
-$hc->run();
+$producer = new \Simplario\Checker\Producer($config['tasks']);
+$producer->run();

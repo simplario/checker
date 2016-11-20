@@ -9,11 +9,13 @@ use PHPUnit\Framework\TestCase;
 
 class StoragePdoTest extends TestCase
 {
-
+    /**
+     * @return void
+     */
     public function testRunTestExists()
     {
 
-        $this->assertEquals(1,1);
+        $this->assertEquals(1, 1);
 
 // TODO
 //        $this->expectException(SuccessException::class);
@@ -31,9 +33,12 @@ class StoragePdoTest extends TestCase
 //        );
     }
 
+    /**
+     * @return void
+     */
     public function testRunTestExistsNot()
     {
-        $this->assertEquals(1,1);
+        $this->assertEquals(1, 1);
 
 // TODO
 //        $this->expectException(FailException::class);
@@ -51,7 +56,9 @@ class StoragePdoTest extends TestCase
 //        );
     }
 
-
+    /**
+     * @return void
+     */
     public function testRunTestExistsNotFail()
     {
         $this->expectException(FailException::class);
@@ -68,5 +75,4 @@ class StoragePdoTest extends TestCase
             ]
         );
     }
-
 }

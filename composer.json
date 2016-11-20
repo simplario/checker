@@ -1,6 +1,7 @@
 {
   "name": "simplario/checker",
   "description": "Check provision like a boss",
+  "license": "MIT",
   "keywords": [
     "check",
     "checker",
