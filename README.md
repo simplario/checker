@@ -33,6 +33,13 @@ $ composer phar
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
+[ico-version]: https://img.shields.io/packagist/v/simplario/checker.svg
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg
+[ico-travis]: https://img.shields.io/travis/simplario/checker/master.svg
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/simplario/checker.svg
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/simplario/checker.svg
+[ico-downloads]: https://img.shields.io/packagist/dt/simplario/checker.svg
+
 [link-packagist]: https://packagist.org/packages/simplario/checker
 [link-travis]: https://travis-ci.org/simplario/checker
 [link-scrutinizer]: https://scrutinizer-ci.com/g/simplario/checker/code-structure
