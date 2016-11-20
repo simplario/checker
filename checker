@@ -50,8 +50,9 @@ if (isset($argv[1])) {
 // Detect configuration file
 
 $path = null;
-foreach ($taskPathSet as $path) {
-    if (file_exists($path)) {
+foreach ($taskPathSet as $item) {
+    if (file_exists($item)) {
+        $path = $item;
         break;
     }
 }
