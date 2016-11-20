@@ -58,13 +58,13 @@ class Producer
 
     public function run()
     {
-        $this->renderHeader('Run checker');
-
         if (empty($this->config)) {
             $this->output(self::ERROR_CONFIG_WITH_EMPTY_TASK, AbstractOutput::TYPE_ERROR);
 
             return $this;
         }
+
+        $this->renderHeader('Run checker');
 
         foreach ($this->config as $index => $task) {
             $resultException = $this->runTask($task);
