@@ -13,9 +13,8 @@ Check provision like a boss
 ## Install
 - PHP 5.6+
 
-Via Composer
-
 ``` bash
+# via composer
 $ composer require simplario/checker
 ```
 
@@ -24,10 +23,38 @@ $ composer require simplario/checker
 $ composer test
 ```
 
-## Build phar
+## Build and setup checker.phar
 ``` bash
+# build file 'checker.phar'
 $ composer phar
+
+# setup
+$ sudo chmod +x checker.phar && mv checker.phar /usr/bin/checker
 ```
+
+## Start working
+
+1) create file 'checker.php' (or checker.yaml / checker.yml / checker.json) - look at /example/
+``` php
+<?php
+return [
+    'tasks' => [
+        // default checker ( filesystem / gateway / phpExtension / service / storagePdo ... )
+        ['checker' => 'filesystem', 'path' => __FILE__, 'exists' => true, 'readable' => true],
+        // custom checker
+        ['checker' => Simplario\Checker\Checker\Filesystem::class, 'path' => __FILE__, 'exists' => true],
+    ],
+];
+```
+2) Run 'checker'
+``` bash
+# run vie composer bin
+$ ./vendor/bin/checker checker.php
+
+# run global
+$ checker checker.yml
+```
+
 
 ## License
 
