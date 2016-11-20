@@ -10,7 +10,9 @@ use PHPUnit\Framework\TestCase;
 
 class ServiceTest extends TestCase
 {
-
+    /**
+     * @return void
+     */
     public function testInstance()
     {
         $checker = new Service();
@@ -29,6 +31,9 @@ class ServiceTest extends TestCase
 
     }
 
+    /**
+     * @return void
+     */
     public function testRunTestExists()
     {
         $this->expectException(SuccessException::class);
@@ -37,6 +42,9 @@ class ServiceTest extends TestCase
         $checker->check(['name' => 'php', 'exists' => true]);
     }
 
+    /**
+     * @return void
+     */
     public function testRunTestExistsNot()
     {
         $this->expectException(FailException::class);
@@ -45,10 +53,12 @@ class ServiceTest extends TestCase
         $checker->check(['name' => 'php', 'exists' => false]);
     }
 
-
+    /**
+     * @return void
+     */
     public function testRunTestWhich()
     {
-        $this->assertEquals(1,1);
+        $this->assertEquals(1, 1);
 
 // TODO
 //        $this->expectException(SuccessException::class);
@@ -64,6 +74,4 @@ class ServiceTest extends TestCase
         $checker = new Service();
         $checker->check(['name' => 'php', 'which' => '/UNDEFINED/UNDEFINED']);
     }
-
-
 }

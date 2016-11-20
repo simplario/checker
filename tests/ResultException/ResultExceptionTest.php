@@ -2,13 +2,17 @@
 
 namespace Simplario\Checker\Tests\Checker;
 
-use Simplario\Checker\Checker\Filesystem;
 use Simplario\Checker\ResultException\AbstractResultException;
 use Simplario\Checker\ResultException\ErrorException;
 use Simplario\Checker\ResultException\FailException;
 use Simplario\Checker\ResultException\SuccessException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ResultExceptionTest
+ *
+ * @package Simplario\Checker\Tests\Checker
+ */
 class ResultExceptionTest extends TestCase
 {
     public function testResultExceptionInstance()
