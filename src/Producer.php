@@ -78,13 +78,15 @@ class Producer
         return $this;
     }
 
-
     protected $checkerSet = [];
 
-
-    public function createChecker($task)
+    public function createChecker($checkerAlias)
     {
-        $class = __NAMESPACE__ . '\\Checker\\' . ucfirst($task);
+        if (class_exists($checkerAlias)) {
+            $class = $checkerAlias;
+        } else {
+            $class = __NAMESPACE__ . '\\Checker\\' . ucfirst($checkerAlias);
+        }
 
         if (!isset($this->checkerSet[$class])) {
             $this->checkerSet[$class] = new $class;
