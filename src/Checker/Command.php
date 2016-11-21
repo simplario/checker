@@ -6,16 +6,16 @@ use Simplario\Checker\ResultException\FailException;
 use Simplario\Checker\ResultException\SuccessException;
 
 /**
- * Class Service
+ * Class Command
  *
  * @package Simplario\Checker\Checker
  */
-class Service extends AbstractChecker
+class Command extends AbstractChecker
 {
     /**
      * @var string
      */
-    protected $target = 'name';
+    protected $target = 'command';
 
     /**
      * @param string $command
@@ -90,7 +90,7 @@ class Service extends AbstractChecker
      */
     protected function testVersion($name, $version, array $task)
     {
-        $output = $this->runCommand("{$name} -version || {$name} -v || {$name} --version");
+        $output = $this->runCommand("{$name} -version");
 
         $pattern = "/{$version}/i";
 
