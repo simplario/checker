@@ -26,7 +26,7 @@ class StoragePdo extends AbstractChecker
     {
         // Exception on fail connection
         $instance = new \PDO(
-            isset($connect['dsn']) ? $connect['user'] : null,
+            isset($connect['dsn']) ? $connect['dsn'] : null,
             isset($connect['user']) ? $connect['user'] : null,
             isset($connect['password']) ? $connect['password'] : null,
             isset($connect['options']) ? $connect['options'] : null
