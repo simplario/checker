@@ -134,4 +134,25 @@ class Filesystem extends AbstractChecker
 
         throw new FailException($msg, $task);
     }
+
+    /**
+     * @param string $path
+     * @param string $find
+     * @param array  $task
+     *
+     * @throws FailException
+     * @throws SuccessException
+     */
+    protected function testContain($path, $find, array $task)
+    {
+        $source = file_get_contents($path);
+
+        if (strpos($source, $find) !== false) {
+            throw new SuccessException('Ok', $task);
+        }
+
+        $msg = "Path '{$path}' must contain '{$find}'";
+
+        throw new FailException($msg, $task);
+    }
 }

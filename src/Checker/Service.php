@@ -90,7 +90,7 @@ class Service extends AbstractChecker
      */
     protected function testVersion($name, $version, array $task)
     {
-        $output = $this->runCommand("{$name} -version");
+        $output = $this->runCommand("{$name} -version || {$name} -v || {$name} --version");
 
         $pattern = "/{$version}/i";
 

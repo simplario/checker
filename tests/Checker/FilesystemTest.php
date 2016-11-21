@@ -158,4 +158,28 @@ class FileSystemTest extends TestCase
         $checker = new Filesystem();
         $checker->check(['path' => __FILE__, 'chmod' => $currentChmod]);
     }
+
+    /**
+     * @return void
+     */
+    public function testRunTestContain()
+    {
+        $findMe = 'UniqueSuperStringInThisFile-!@#';
+        $this->expectException(SuccessException::class);
+
+        $checker = new Filesystem();
+        $checker->check(['path' => __FILE__, 'contain' => $findMe]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunTestContainNot()
+    {
+        $findMe = uniqid() . time();
+        $this->expectException(FailException::class);
+
+        $checker = new Filesystem();
+        $checker->check(['path' => __FILE__, 'contain' => $findMe]);
+    }
 }
