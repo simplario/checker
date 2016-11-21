@@ -2,36 +2,49 @@
 
 namespace Simplario\Checker\Tests\Checker;
 
+use Simplario\Checker\Checker\AbstractChecker;
+use Simplario\Checker\Checker\StorageMysqli;
 use Simplario\Checker\Checker\StoragePdo;
 use Simplario\Checker\ResultException\FailException;
 use Simplario\Checker\ResultException\SuccessException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class StoragePdoTest
+ * Class StorageMysqliTest
  *
  * @package Simplario\Checker\Tests\Checker
  */
-class StoragePdoTest extends TestCase
+class StorageMysqliTest extends TestCase
 {
+    /**
+     * @return void
+     */
+    public function testInstance()
+    {
+        $checker = new StorageMysqli();
+
+        $this->assertInstanceOf(AbstractChecker::class, $checker);
+        $this->assertInstanceOf(StoragePdo::class, $checker);
+    }
+
     /**
      * @return void
      */
     public function testRunTestExists()
     {
-
         $this->assertEquals(1, 1);
 
 // TODO
 //        $this->expectException(SuccessException::class);
 //
-//        $checker = new StoragePdo();
+//        $checker = new StorageMysqli();
 //        $checker->check(
 //            [
 //                'connect' => [
-//                    'dsn'      => 'mysql:host=127.0.0.1:3306;dbname=content',
+//                    'host'     => '127.0.0.1',
 //                    'user'     => 'user',
-//                    'password' => 'password'
+//                    'password' => 'password',
+//                    'database' => 'content'
 //                ],
 //                'exists'  => true
 //            ]
@@ -48,13 +61,14 @@ class StoragePdoTest extends TestCase
 // TODO
 //        $this->expectException(FailException::class);
 //
-//        $checker = new StoragePdo();
+//        $checker = new StorageMysqli();
 //        $checker->check(
 //            [
 //                'connect' => [
-//                    'dsn'      => 'mysql:host=127.0.0.1:3306;dbname=content',
+//                    'host'     => '127.0.0.1',
 //                    'user'     => 'user',
-//                    'password' => 'password'
+//                    'password' => 'password',
+//                    'database' => 'content'
 //                ],
 //                'exists'  => false
 //            ]
@@ -68,13 +82,14 @@ class StoragePdoTest extends TestCase
     {
         $this->expectException(FailException::class);
 
-        $checker = new StoragePdo();
+        $checker = new StorageMysqli();
         $checker->check(
             [
                 'connect' => [
-                    'dsn'      => 'UNDEFINED',
+                    'host'     => '127.0.0.1',
                     'user'     => 'UNDEFINED',
-                    'password' => 'UNDEFINED'
+                    'password' => 'UNDEFINED',
+                    'database' => 'UNDEFINED'
                 ],
                 'exists'  => true
             ]

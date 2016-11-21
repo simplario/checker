@@ -45,6 +45,4 @@ class ResultExceptionTest extends TestCase
         $this->assertEquals('aaa', $error->getChecker());
 
     }
-
-
 }
