@@ -5,12 +5,23 @@ namespace Simplario\Checker\Checker;
 use Simplario\Checker\ResultException\FailException;
 use Simplario\Checker\ResultException\SuccessException;
 
+/**
+ * Class Service
+ *
+ * @package Simplario\Checker\Checker
+ */
 class Service extends AbstractChecker
 {
-
+    /**
+     * @var string
+     */
     protected $target = 'name';
 
-
+    /**
+     * @param string $command
+     *
+     * @return string
+     */
     protected function runCommand($command)
     {
         $output = '';
@@ -27,6 +38,14 @@ class Service extends AbstractChecker
         return $output;
     }
 
+    /**
+     * @param string  $name
+     * @param boolean $expectExists
+     * @param array   $task
+     *
+     * @throws FailException
+     * @throws SuccessException
+     */
     protected function testExists($name, $expectExists, array $task)
     {
         $output = $this->runCommand("which {$name}");
@@ -40,6 +59,14 @@ class Service extends AbstractChecker
         throw new FailException($msg, $task);
     }
 
+    /**
+     * @param string  $name
+     * @param boolean $expectWhich
+     * @param array   $task
+     *
+     * @throws FailException
+     * @throws SuccessException
+     */
     protected function testWhich($name, $expectWhich, array $task)
     {
         $output = $this->runCommand("which {$name}");
@@ -53,6 +80,14 @@ class Service extends AbstractChecker
         throw new FailException($msg, $task);
     }
 
+    /**
+     * @param string $name
+     * @param string $version
+     * @param array  $task
+     *
+     * @throws FailException
+     * @throws SuccessException
+     */
     protected function testVersion($name, $version, array $task)
     {
         $output = $this->runCommand("{$name} -version");

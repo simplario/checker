@@ -2,6 +2,11 @@
 
 namespace Simplario\Checker\Output;
 
+/**
+ * Class AbstractOutput
+ *
+ * @package Simplario\Checker\Output
+ */
 abstract class AbstractOutput
 {
 
@@ -10,5 +15,11 @@ abstract class AbstractOutput
     const TYPE_FAIL = 'fail';
     const TYPE_ERROR = 'error';
 
+    /**
+     * @param string $msg
+     * @param string $type
+     *
+     * @return mixed
+     */
     abstract public function write($msg = '', $type = self::TYPE_DEFAULT);
 }

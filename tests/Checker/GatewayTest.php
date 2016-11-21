@@ -15,7 +15,9 @@ use PHPUnit\Framework\TestCase;
  */
 class GatewayTest extends TestCase
 {
-
+    /**
+     * @return void
+     */
     public function testInstance()
     {
         $checker = new Gateway();
@@ -23,6 +25,9 @@ class GatewayTest extends TestCase
         $this->assertInstanceOf(AbstractChecker::class, $checker);
     }
 
+    /**
+     * @return void
+     */
     public function testRunTestExists()
     {
         $this->expectException(SuccessException::class);
@@ -31,6 +36,9 @@ class GatewayTest extends TestCase
         $checker->check(['url' => 'http://google.com/', 'exists' => true]);
     }
 
+    /**
+     * @return void
+     */
     public function testRunTestExistsNot()
     {
         $this->expectException(FailException::class);
@@ -38,5 +46,4 @@ class GatewayTest extends TestCase
         $checker = new Gateway();
         $checker->check(['url' => 'http://google.com/', 'exists' => false]);
     }
-
 }

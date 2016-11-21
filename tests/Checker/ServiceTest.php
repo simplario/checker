@@ -8,6 +8,11 @@ use Simplario\Checker\ResultException\FailException;
 use Simplario\Checker\ResultException\SuccessException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ServiceTest
+ *
+ * @package Simplario\Checker\Tests\Checker
+ */
 class ServiceTest extends TestCase
 {
     /**
